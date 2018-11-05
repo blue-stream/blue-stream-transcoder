@@ -6,22 +6,23 @@ import { IVideo } from './video.interface';
 
 export class TranscodeBroker {
     public static async assertExchanges() {
-        await rabbit.assertExchange('video', 'topic');
-    }
-
-    public static async publish(exchange: string,
-                                routingKey: string,
-                                message: Object,
-                                options?: amqp.Options.Publish) {
-        rabbit.publish('application', routingKey, message, options);
+        await rabbit.assertExchange('transcoder', 'topic');
     }
 
     public static async subscribe() {
-        await rabbit.subscribe('video-transcode-queue',
+        await rabbit.subscribe('transcode-queue',
                                { exchange : 'video', pattern : 'video.upload.finish' },
-                               (video: Object) => {
-                                   return TranscodeController.transcode((video as IVideo).path);
-                               });
+                               async (video: Object) => {
+                                   try {
+                                       await TranscodeController.transcode((video as IVideo).path);
+                                       rabbit.publish('transcoder', 'video.transcode.finished', video);
+                                   } catch (error) {
+                                       rabbit.publish('transcoder', 'video.transcode.failed', video);
+                                       throw new Error(error);
+                                   }
+                               },
+                            );
+
     }
 
 }
