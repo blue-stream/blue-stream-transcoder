@@ -19,8 +19,8 @@ export class TranscodeBroker {
     public static async subscribe() {
         await rabbit.subscribe('video-transcode-queue',
                                { exchange : 'video', pattern : 'video.upload.finish' },
-                               (video: IVideo | any) => {
-                                   return TranscodeController.transcode(video.path);
+                               (video: Object) => {
+                                   return TranscodeController.transcode((video as IVideo).path);
                                });
     }
 
