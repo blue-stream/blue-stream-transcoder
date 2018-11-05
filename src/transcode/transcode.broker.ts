@@ -6,6 +6,7 @@ import { IVideo } from './video.interface';
 
 export class TranscodeBroker {
     public static async assertExchanges() {
+        await rabbit.assertExchange('uploader', 'topic');
         await rabbit.assertExchange('transcoder', 'topic');
     }
 
