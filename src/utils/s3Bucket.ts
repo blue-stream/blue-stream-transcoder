@@ -39,7 +39,7 @@ export class S3Bucket {
             Key: key,
             Body: fileStream,
         };
-        // Upload func use multi-part in parallel while putObject not. 
+        // Upload func use multi-part in parallel while putObject not.
         // Notice that in order to upload to public bucket, you can't use multi-part
         return +(process.env.IS_PUBLIC_BUCKET || 0) === 1 ?
         this.s3.putObject(params).promise() :
