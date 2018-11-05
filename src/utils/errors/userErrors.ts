@@ -12,8 +12,8 @@ export class IdInvalidError extends UserError {
     }
 }
 
-export class FeatureNameNotFoundError extends UserError {
+export class TranscodeNotFoundError extends UserError {
     constructor(message?: string) {
-        super(message || `FeatureName not found`, 404);
+        super(message || `Transcode not found`, 404);
     }
 }

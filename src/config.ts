@@ -1,9 +1,4 @@
 export type Configuration = {
-    db: {
-        host: string;
-        name: string;
-        port: number;
-    };
     logger: {
         durable: boolean;
         exchangeType: string;
@@ -24,18 +19,30 @@ export type Configuration = {
         port: number,
         name: string,
     };
-    authentication: {
-        required: boolean;
-        secret: string;
+    s3: {
+        accessKeyId: string;
+        region: string;
+        secretAccessKey: string;
+        bucket: string;
+        isPathStyle: boolean;
+        endpoint: string;
+    };
+    preview: {
+        size: string;
+        offsetPercent: number;
+        time: number;
+    };
+    thumbnail: {
+        size: string;
+    };
+    video: {
+        videoCodec: string;
+        audioCodec: string;
+        format: string;
     };
 };
 
 export const config: Configuration = {
-    db: {
-        host: process.env.DB_SERVER || 'localhost',
-        name: process.env.DB_NAME || 'blue-stream-template',
-        port: 27017,
-    },
     logger: {
         durable: false,
         exchangeType: process.env.RMQ_LOGGER_TYPE || 'topic',
@@ -54,10 +61,27 @@ export const config: Configuration = {
     },
     server: {
         port: 3000,
-        name: 'featureName',
+        name: 'transcode',
     },
-    authentication: {
-        required: true,
-        secret: process.env.SECRET_KEY || 'bLue5tream@2018', // Don't use static value in production! remove from source control!
+    s3: {
+        accessKeyId: process.env.ACCESS_KEY_ID || 'AKIAINJAWB5EF2QRFR7Q',
+        secretAccessKey: process.env.SECRET_ACCESS_KEY || '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',
+        region: process.env.REGION || 'us-east-1',
+        bucket: process.env.BUCKET || 'blue-stream-test',
+        isPathStyle: process.env.IS_PATH_STYLE === '1' ? true : false,
+        endpoint: process.env.ENDPOINT || '',
+    },
+    preview: {
+        size: process.env.previewSize || '320x180',
+        offsetPercent: +(process.env.previewOffsetPercent || 0.3),
+        time: +(process.env.previewTime || 3),
+    },
+    thumbnail: {
+        size: process.env.thumbnailSize || '320x180',
+    },
+    video: {
+        videoCodec: process.env.videoCodec || 'aac',
+        audioCodec: process.env.audioCodec || 'libx264',
+        format: process.env.format || 'mp4',
     },
 };

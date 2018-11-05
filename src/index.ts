@@ -1,39 +1,26 @@
 import * as mongoose from 'mongoose';
 import * as rabbit from 'rabbit-lite';
-import { Server } from './server';
 import { Logger } from './utils/logger';
 import { config } from './config';
 import { syslogSeverityLevels } from 'llamajs';
 
-// <RabbitMQ>
-import { FeatureNameBroker } from './FEATURE_NAME/FEATURE_NAME.broker';
-// </RabbitMQ>
-
+import { TranscodeBroker } from './transcode/transcode.broker';
 process.on('uncaughtException', (err) => {
     console.error('Unhandled Exception', err.stack);
-    // <RabbitMQ>
     rabbit.closeConnection();
-    // </RabbitMQ>
     process.exit(1);
 });
 
 process.on('unhandledRejection', (err) => {
     console.error('Unhandled Rejection', err);
-    // <RabbitMQ>
     rabbit.closeConnection();
-    // </RabbitMQ>
     process.exit(1);
 });
 
 process.on('SIGINT', async () => {
     try {
         console.log('User Termination');
-        // <MongoDB>
-        await mongoose.disconnect();
-        // </MongoDB>
-        // <RabbitMQ>
         rabbit.closeConnection();
-        // </RabbitMQ>
         process.exit(0);
     } catch (error) {
         console.error('Faild to close connections', error);
@@ -41,21 +28,8 @@ process.on('SIGINT', async () => {
 });
 
 (async () => {
-    // <MongoDB>
-    await mongoose.connect(
-        `mongodb://${config.db.host}:${config.db.port}/${config.db.name}`,
-        { useNewUrlParser: true },
-    );
-
-    console.log(`[MongoDB] connected to port ${config.db.port}`);
-    // </MongoDB>
-
-    // <Logger>
     Logger.configure();
     Logger.log(syslogSeverityLevels.Informational, 'Server Started', `Port: ${config.server.port}`);
-    // </Logger>
-
-    // <RabbitMQ>
     rabbit.configure({
         username : config.rabbitMQ.username,
         password : config.rabbitMQ.password,
@@ -63,20 +37,7 @@ process.on('SIGINT', async () => {
         host : config.rabbitMQ.host,
     });
     await rabbit.connect();
-    await FeatureNameBroker.assertExchanges();
-    await FeatureNameBroker.subscribe();
-    // </RabbitMQ>
-
+    await TranscodeBroker.assertExchanges();
+    await TranscodeBroker.subscribe();
     console.log('Starting server');
-    const server: Server = Server.bootstrap();
-
-    server.app.on('close', () => {
-        // <RabbitMQ>
-        rabbit.closeConnection();
-        // </RabbitMQ>
-        // <MongoDB>
-        mongoose.disconnect();
-        // </MongoDB>
-        console.log('Server closed');
-    });
 })();
