@@ -15,9 +15,9 @@ export class TranscodeBroker {
                                async (video: Object) => {
                                    try {
                                        await TranscodeController.transcode((video as IVideo).path);
-                                       rabbit.publish('transcoder', 'video.transcode.finish', video);
+                                       rabbit.publish('application', 'video.transcode.finish', video);
                                    } catch (error) {
-                                       rabbit.publish('transcoder', 'video.transcode.failed', video);
+                                       rabbit.publish('application', 'video.transcode.failed', video);
                                        throw new Error(error);
                                    }
                                },
