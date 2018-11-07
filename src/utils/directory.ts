@@ -1,6 +1,7 @@
  import * as path from 'path';
 import * as fs from 'fs';
 import * as util from 'util';
+import * as del from 'del';
 import { Command, stdType } from './command';
 
 // Directory Object is Presentation of Unix Directory
@@ -36,21 +37,21 @@ export class Directory {
         return fileName.split('.')[0];
     }
 
-    public drop(): Promise<string> {
-        return Command.execute(`rm -rf ${path.join(this._dir, '/*')}`);
+    public drop(): Promise<string[]> {
+        return del(path.join(this._dir, '/*'));
     }
 
-    public rm(fileName: string): Promise<string> {
-        return Command.execute(`rm -rf ${path.join(this._dir, fileName)}`);
+    public rm(fileName: string): Promise<string[]> {
+        return del(path.join(this._dir, fileName));
     }
 
-    public rmAnyFormat(fileName: string): Promise<string> {
-        // tslint:disable-next-line:prefer-template
-        return Command.execute(`rm -rf ${path.join(this._dir, fileName.split('.')[0] + '.*')}`);
+    public rmAnyFormat(fileName: string): Promise<string[]> {
+        const pattern = path.join(this._dir, `${fileName.split('.')[0]}.*`);
+        return del(path.join(this._dir, pattern));
     }
 
-    public add(filePath: string): Promise<string> {
-        return Command.execute(`cp ${filePath} ${this._dir}`);
+    public add(filePath: string): void {
+        return fs.copyFileSync(filePath, this._dir);
     }
 
     public static checkPathExist(path: string) {

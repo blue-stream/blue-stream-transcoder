@@ -6,13 +6,12 @@ import { IVideo } from './video.interface';
 
 export class TranscodeBroker {
     public static async assertExchanges() {
-        await rabbit.assertExchange('uploader', 'topic');
-        await rabbit.assertExchange('transcoder', 'topic');
+        await rabbit.assertExchange('application', 'topic');
     }
 
     public static async subscribe() {
         await rabbit.subscribe('transcode-queue',
-                               { exchange : 'uploader', pattern : 'video.upload.finish' },
+                               { exchange : 'application', pattern : 'video.upload.finish' },
                                async (video: Object) => {
                                    try {
                                        await TranscodeController.transcode((video as IVideo).path);
