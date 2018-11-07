@@ -28,13 +28,14 @@
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
     "tslint-config-airbnb": "^5.11.0",
-    "typescript": "^2.9.2"
+    "typescript": "^2.9.2",
+    "@types/fluent-ffmpeg": "^2.1.8"
   },
   "dependencies": {
     "amqplib": "^0.5.2",
     "aws-sdk": "^2.282.1",
     "llamajs": "^0.2.0",
     "rabbit-lite": "^0.1.2",
-    "video-master": "^0.1.8"
+    "fluent-ffmpeg": "^2.1.2"
   }
 }

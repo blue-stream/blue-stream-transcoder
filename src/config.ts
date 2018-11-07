@@ -1,48 +1,7 @@
-export type Configuration = {
-    logger: {
-        durable: boolean;
-        exchangeType: string;
-        exchange: string;
-        host: string;
-        port: number;
-        password: string;
-        username: string;
-        persistent: boolean;
-    };
-    rabbitMQ: {
-        host: string;
-        port: number;
-        password: string;
-        username: string;
-    };
-    server: {
-        port: number,
-        name: string,
-    };
-    s3: {
-        accessKeyId: string;
-        region: string;
-        secretAccessKey: string;
-        bucket: string;
-        isPathStyle: boolean;
-        endpoint: string;
-    };
-    preview: {
-        size: string;
-        offsetPercent: number;
-        time: number;
-    };
-    thumbnail: {
-        size: string;
-    };
-    video: {
-        videoCodec: string;
-        audioCodec: string;
-        format: string;
-    };
-};
+import * as path from 'path';
 
-export const config: Configuration = {
+export const config = {
+    videosDirectory: path.join(process.cwd(), 'videos'),
     logger: {
         durable: false,
         exchangeType: process.env.RMQ_LOGGER_TYPE || 'topic',

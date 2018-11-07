@@ -24,7 +24,7 @@ export class Directory {
         return path.join(this._dir, fileName);
     }
 
-    public static changeFormat(fileName: string,format: string): string {
+    public static changeFormat(fileName: string, format: string): string {
         return fileName.replace(path.extname(fileName), `.${format}`);
     }
 
@@ -37,7 +37,7 @@ export class Directory {
     }
 
     public drop(): Promise<string> {
-        return Command.execute(`rm -rf ${path.join(this._dir,'/*')}`);
+        return Command.execute(`rm -rf ${path.join(this._dir, '/*')}`);
     }
 
     public rm(fileName: string): Promise<string> {
