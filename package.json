@@ -29,10 +29,10 @@
     "tslint": "^5.11.0",
     "tslint-config-airbnb": "^5.11.0",
     "typescript": "^2.9.2",
-    "@types/fluent-ffmpeg": "^2.1.8"
+    "@types/fluent-ffmpeg": "^2.1.8",
+    "@types/del": "^3.0.1"
   },
   "dependencies": {
-    "@types/del": "^3.0.1",
     "amqplib": "^0.5.2",
     "aws-sdk": "^2.282.1",
     "del": "^3.0.0",

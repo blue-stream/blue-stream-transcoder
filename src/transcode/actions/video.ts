@@ -31,7 +31,7 @@ export class Video {
             .on('error', function (err: Error) {
                 // console.error(`ffmpeg error: ${err.message}`);
                 return reject(err);
-            })
+            });
         });
     }
 }

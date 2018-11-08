@@ -5,23 +5,28 @@ import { Directory } from '../utils/directory';
 import { config } from '../config';
 
 export class TranscodeController {
-    static bucket: S3Bucket = new S3Bucket();
+    static bucket: S3Bucket | undefined = config.s3.enable ? new S3Bucket() : undefined;
     static videosDirectory = Directory.createDirectory(config.videosDirectory);
 
-    static async transcode(key: string): Promise<void> {
+    static async transcode(originKey: string): Promise<void> {
         const videosDirectory = TranscodeController.videosDirectory;
         const bucket = TranscodeController.bucket;
         try {
-            await bucket.downloadFileToDir(key, videosDirectory.dir);
+            if (bucket) await bucket.downloadFileToDir(originKey, videosDirectory.dir);
 
-            await videosDirectory.checkFileExist(key);
+            await videosDirectory.checkFileExist(originKey);
 
-            await TranscodeManager.transcodeAndCreate(videosDirectory.dir, key);
+            await TranscodeManager.transcodeAndCreate(videosDirectory.dir, originKey);
 
-            await TranscodeManager.uploadTranscodedFiles(videosDirectory.dir, key, bucket);
+            if (bucket) {
+                await TranscodeManager.uploadTranscodedFiles(videosDirectory.dir, originKey, bucket);
+                await bucket.delete(originKey);
+            } else {
+                if (!(Directory.getFormat(originKey) === 'mp4')) await videosDirectory.rm(originKey);
+            }
 
         } finally {
-            await videosDirectory.rmAnyFormat(key);
+            if (bucket) await videosDirectory.rmAnyFormat(originKey);
         }
     }
 

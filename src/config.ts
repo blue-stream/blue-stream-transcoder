@@ -1,6 +1,7 @@
 import * as path from 'path';
 
 export const config = {
+    sampleVideosDirectory: path.join(process.cwd(), 'sample-videos'),
     videosDirectory: path.join(process.cwd(), 'videos'),
     logger: {
         durable: false,
@@ -23,6 +24,7 @@ export const config = {
         name: 'transcode',
     },
     s3: {
+        enable: true,
         accessKeyId: process.env.ACCESS_KEY_ID || 'AKIAINJAWB5EF2QRFR7Q',
         secretAccessKey: process.env.SECRET_ACCESS_KEY || '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',
         region: process.env.REGION || 'us-east-1',

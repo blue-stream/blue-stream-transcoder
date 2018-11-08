@@ -7,9 +7,8 @@ export class Thumbnail {
     private static size: string = config.thumbnail.size;
 
     public static async create(dir: string, key: string) {
-        const sourcePath = path.join(dir, key);
         await Thumbnail.process(
-            sourcePath,
+            path.join(dir, key),
             Directory.changeFormat(key, 'png'),
             dir,
         );
@@ -29,7 +28,7 @@ export class Thumbnail {
             })
             .on('error', function(err: Error) {
                 return reject(err);
-            })
+            });
         });
     }
 }

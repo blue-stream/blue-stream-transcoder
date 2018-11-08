@@ -9,14 +9,15 @@ export class Preview {
     private static time: number = config.preview.time;
     private static offsetPercent: number = config.preview.offsetPercent;
 
-    public static async create(dir:string, key: string) {
+    public static async create(dir:string, key: string): Promise<string> {
         const [sourcePath, destPath] = [
             path.join(dir, key),
             path.join(dir, Directory.changeFormat(key, 'gif')),
         ];
         const length = await Preview.getLength(sourcePath);
         const offset = Preview.getOffset(length);
-        await Preview.createPreview(sourcePath, destPath, offset);
+        await Preview.process(sourcePath, destPath, offset);
+        return destPath;
     }
 
     private static async getLength(sourcePath: string): Promise<number> {
@@ -29,7 +30,7 @@ export class Preview {
         return Math.ceil(length) * Preview.offsetPercent;
     }
 
-    private static createPreview(sourcePath: string, destPath: string, offset: number): Promise<string> {
+    private static process(sourcePath: string, destPath: string, offset: number): Promise<string> {
         return Command
         .execute(`ffmpeg -i ${sourcePath} -ss ${offset} -t ${Preview.time} -vf scale=${Preview.size} -r 10 -f image2pipe -vcodec ppm - | convert -delay 5 -loop 0 - ${destPath}`);
     }
