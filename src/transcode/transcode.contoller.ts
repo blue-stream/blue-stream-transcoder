@@ -1,32 +1,34 @@
 import { TranscodeManager } from './transcode.manager';
 import { S3Bucket } from '../utils/s3Bucket';
 import * as rabbit from 'rabbit-lite';
-import { Directory } from '../utils/directory';
 import { config } from '../config';
+import * as path from 'path';
+import * as del from 'del';
+import * as helpers from '../utils/helpers';
 
 export class TranscodeController {
     static bucket: S3Bucket | undefined = config.s3.enable ? new S3Bucket() : undefined;
-    static videosDirectory = Directory.createDirectory(config.videosDirectory);
 
     static async transcode(originKey: string): Promise<void> {
-        const videosDirectory = TranscodeController.videosDirectory;
+        const videosDirectory = config.videosDirectory;
         const bucket = TranscodeController.bucket;
+        const originPath = path.join(videosDirectory, originKey);
         try {
-            if (bucket) await bucket.downloadFileToDir(originKey, videosDirectory.dir);
+            if (bucket) await bucket.download(originKey, videosDirectory);
 
-            await videosDirectory.checkFileExist(originKey);
+            await helpers.checkFileExist(originPath);
 
-            await TranscodeManager.transcodeAndCreate(videosDirectory.dir, originKey);
+            const products: string[] = await TranscodeManager.execActions(originPath);
 
             if (bucket) {
-                await TranscodeManager.uploadTranscodedFiles(videosDirectory.dir, originKey, bucket);
+                await products.map(product => bucket.upload(product));
                 await bucket.delete(originKey);
             } else {
-                if (!(Directory.getFormat(originKey) === 'mp4')) await videosDirectory.rm(originKey);
+                if (!(path.extname(originKey) === config.video.extention)) await del(originPath);
             }
 
         } finally {
-            if (bucket) await videosDirectory.rmAnyFormat(originKey);
+            if (bucket) await del(helpers.changeExtention(originPath, '.*'));
         }
     }
 

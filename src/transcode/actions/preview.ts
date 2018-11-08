@@ -1,6 +1,6 @@
 import * as ffmpeg from 'fluent-ffmpeg';
 import { config } from '../../config';
-import { Directory } from '../../utils/directory';
+import * as helpers from '../../utils/helpers';
 import { Command, stdType } from '../../utils/command';
 import * as path from 'path';
 
@@ -9,10 +9,10 @@ export class Preview {
     private static time: number = config.preview.time;
     private static offsetPercent: number = config.preview.offsetPercent;
 
-    public static async create(dir:string, key: string): Promise<string> {
+    public static async create(videoPath: string): Promise<string> {
         const [sourcePath, destPath] = [
-            path.join(dir, key),
-            path.join(dir, Directory.changeFormat(key, 'gif')),
+            videoPath,
+            helpers.changeExtention(videoPath, '.gif'),
         ];
         const length = await Preview.getLength(sourcePath);
         const offset = Preview.getOffset(length);

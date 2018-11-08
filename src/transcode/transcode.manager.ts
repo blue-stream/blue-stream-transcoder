@@ -2,34 +2,15 @@ import { S3Bucket } from '../utils/s3Bucket';
 import { Video } from './actions/video';
 import { Thumbnail } from './actions/thumbnail';
 import { Preview } from './actions/preview';
-import { Directory } from '../utils/directory';
+import * as path from 'path';
+import { config } from '../config';
 
 export class TranscodeManager {
-    public static transcodeAndCreate(dir: string, key: string) {
+    public static execActions(videoPath: string): Promise<string[]> {
         return Promise.all([
-            Video.transcode(dir, key),
-            Thumbnail.create(dir, key),
-            Preview.create(dir, key),
+            path.extname(videoPath) === config.video.extention ? Video.transcode(videoPath) : '',
+            Thumbnail.create(videoPath),
+            Preview.create(videoPath),
         ]);
     }
-
-    public static uploadTranscodedFiles(dir: string, key: string , bucket: S3Bucket) {
-        return Promise.all([
-            Directory.getFormat(key) === 'mp4' ?
-            Promise.resolve() as Promise<any> :
-            bucket.uploadFileFromDir(
-                dir,
-                Directory.changeFormat(key, 'mp4'),
-            ),
-            bucket.uploadFileFromDir(
-                dir,
-                Directory.changeFormat(key, 'png'),
-            ),
-            bucket.uploadFileFromDir(
-                dir,
-                Directory.changeFormat(key, 'gif'),
-            ),
-        ]);
-    }
-
 }

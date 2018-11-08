@@ -43,6 +43,6 @@ export const config = {
     video: {
         videoCodec: process.env.videoCodec || 'aac',
         audioCodec: process.env.audioCodec || 'libx264',
-        format: process.env.format || 'mp4',
+        extention: process.env.format || '.mp4',
     },
 };

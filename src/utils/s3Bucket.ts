@@ -20,7 +20,7 @@ export class S3Bucket {
         this.bucket = config.s3.bucket;
     }
 
-    downloadFileToDir(key: string, destDir: string) {
+    download(key: string, destDir: string) {
         const fileStream = fs.createWriteStream(path.join(destDir, key));
         const params = { Bucket: this.bucket, Key: key };
         return this.s3.getObject(params).
@@ -32,11 +32,12 @@ export class S3Bucket {
         }).promise();
     }
 
-    uploadFileFromDir(srcDir: string, key: string) {
-        const fileStream = fs.createReadStream(path.join(srcDir, key));
+    upload(srcPath: string) {
+        if (!srcPath) return false;
+        const fileStream = fs.createReadStream(srcPath);
         const params = {
             Bucket: this.bucket,
-            Key: key,
+            Key: path.basename(srcPath),
             Body: fileStream,
         };
         // Upload func use multi-part in parallel while putObject not.
@@ -46,7 +47,7 @@ export class S3Bucket {
         this.s3.upload(params).promise();
     }
 
-    checkFileExist(key: string) {
+    checkKeyExist(key: string) {
         const params = { Bucket: this.bucket, Key: key };
         return this.s3.headObject(params).promise();
     }
