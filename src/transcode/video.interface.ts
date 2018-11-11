@@ -1,4 +1,11 @@
-export interface IVideo {
+export interface IUploadedVideo {
     id: string;
-    path: string;
+    key: string;
+}
+
+export interface ITranscodedVideo {
+    id: string;
+    thumbnailPath: string;
+    previewPath: string;
+    videoPath: string
 }

@@ -2,7 +2,7 @@ import * as rabbit from 'rabbit-lite';
 import * as amqp from 'amqplib';
 import { config } from '../config';
 import { TranscodeController } from './transcode.contoller';
-import { IVideo } from './video.interface';
+import { IUploadedVideo, ITranscodedVideo } from './video.interface';
 
 export class TranscodeBroker {
     public static async assertExchanges() {
@@ -14,13 +14,16 @@ export class TranscodeBroker {
                                { exchange : 'application', pattern : 'video.upload.finish' },
                                async (video: Object) => {
                                    try {
-                                       console.log('get message');
-                                       await TranscodeController.transcode((video as IVideo).path);
-                                       rabbit.publish('application', 'video.transcode.finish', video);
-                                       console.log('publish message');
+                                       const products: string[] = await TranscodeController.transcode((video as IUploadedVideo).key);
+                                       const newVideo: ITranscodedVideo  = {
+                                           id: (video as IUploadedVideo).id,
+                                           thumbnailPath: products[0], 
+                                           previewPath: products[1], 
+                                           videoPath: products[2] 
+                                       }
+                                       rabbit.publish('application', 'video.transcode.finish', newVideo);
                                    } catch (error) {
                                        rabbit.publish('application', 'video.transcode.failed', video);
-                                       console.log('publish error', error);
                                        throw new Error(error);
                                    }
                                },
