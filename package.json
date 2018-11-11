@@ -30,7 +30,6 @@
     "@types/del": "^3.0.1"
   },
   "dependencies": {
-    "amqplib": "^0.5.2",
     "aws-sdk": "^2.282.1",
     "del": "^3.0.0",
     "fluent-ffmpeg": "^2.1.2",
