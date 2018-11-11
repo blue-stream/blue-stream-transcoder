@@ -8,8 +8,13 @@ export function changeExtention(filePath: string, format: string): string {
     return filePath.replace(path.extname(filePath), format);
 }
 
-export function checkFileExist(filePath: string) {
-    return util.promisify(fs.access)(filePath);
+export async function isFileExist(filePath: string) {
+    try {
+        await util.promisify(fs.access)(filePath);
+        return true;
+    } catch {
+        return false;
+    }
 }
 
 export function createDirectory(dir: string) {

@@ -37,7 +37,7 @@ describe('Thumbnail action', () => {
                 expect(createdThumbnail).to.exist;
                 expect(createdThumbnail).to.be.string;
                 expect(path.isAbsolute(createdThumbnail)).to.be.true;
-                expect(await helpers.checkFileExist(createdThumbnail));
+                expect(await helpers.isFileExist(createdThumbnail)).to.be.true;
             });
         });
 
@@ -53,7 +53,7 @@ describe('Thumbnail action', () => {
                 expect(createdThumbnail).to.exist;
                 expect(createdThumbnail).to.be.string;
                 expect(path.isAbsolute(createdThumbnail)).to.be.true;
-                expect(await helpers.checkFileExist(createdThumbnail));
+                expect(await helpers.isFileExist(createdThumbnail)).to.be.true;
             });
         });
 
@@ -69,7 +69,7 @@ describe('Thumbnail action', () => {
                 expect(createdThumbnail).to.exist;
                 expect(createdThumbnail).to.be.string;
                 expect(path.isAbsolute(createdThumbnail)).to.be.true;
-                expect(await helpers.checkFileExist(createdThumbnail));
+                expect(await helpers.isFileExist(createdThumbnail)).to.be.true;
             });
         });
 

@@ -8,32 +8,33 @@ export class S3Bucket {
     bucket: string;
 
     constructor() {
-        this.s3 = new aws.S3({
+        const s3Config: any = {
             accessKeyId: config.s3.accessKeyId,
             region: config.s3.region,
             secretAccessKey: config.s3.secretAccessKey,
             signatureVersion: 'v3',
             s3ForcePathStyle: config.s3.isPathStyle,
-            endpoint: config.s3.endpoint,
-        });
+        };
+        if (config.s3.endpoint) s3Config.endpoint = config.s3.endpoint;
+        this.s3 = new aws.S3(s3Config);
 
         this.bucket = config.s3.bucket;
     }
 
-    download(key: string, destDir: string) {
-        const fileStream = fs.createWriteStream(path.join(destDir, key));
-        const params = { Bucket: this.bucket, Key: key };
-        return this.s3.getObject(params).
+    async download(destPath: string) {
+        const fileStream = fs.createWriteStream(destPath);
+        const params = { Bucket: this.bucket, Key: path.basename(destPath) };
+        await this.s3.getObject(params).
         on('httpData', function (chunk: any) {
             fileStream.write(chunk);
         }).
         on('httpDone', function () {
             fileStream.end();
         }).promise();
+        return destPath;
     }
 
-    upload(srcPath: string) {
-        if (!srcPath) return false;
+    async upload(srcPath: string) {
         const fileStream = fs.createReadStream(srcPath);
         const params = {
             Bucket: this.bucket,
@@ -42,14 +43,20 @@ export class S3Bucket {
         };
         // Upload func use multi-part in parallel while putObject not.
         // Notice that in order to upload to public bucket, you can't use multi-part
-        return +(process.env.IS_PUBLIC_BUCKET || 0) === 1 ?
+        await (config.s3.isPublicBucket === true ?
         this.s3.putObject(params).promise() :
-        this.s3.upload(params).promise();
+        this.s3.upload(params).promise());
+        return path.basename(srcPath);
     }
 
-    checkKeyExist(key: string) {
+    async isKeyExist(key: string) {
         const params = { Bucket: this.bucket, Key: key };
-        return this.s3.headObject(params).promise();
+        try {
+            await this.s3.headObject(params).promise();
+            return true;
+        } catch {
+            return false;
+        }
     }
 
     delete(key: string) {

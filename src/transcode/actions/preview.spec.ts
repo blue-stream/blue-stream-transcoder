@@ -6,7 +6,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as del from 'del';
 
-
 const videosDirectory = config.videosDirectory;
 const sampleVideosDirectory = config.sampleVideosDirectory;
 const flvSample = path.join(sampleVideosDirectory, 'flv.flv');
@@ -22,14 +21,14 @@ describe('Preview action', () => {
     });
 
     after(async () => {
-        await del(path.join(videosDirectory,'*'));
+        await del(path.join(videosDirectory, '*'));
     });
 
     describe('#create()', () => {
         context('When video is flv format', () => {
 
             beforeEach(async () => {
-                await del(path.join(videosDirectory,'*'));
+                await del(path.join(videosDirectory, '*'));
                 fs.copyFileSync(flvSample, flv);
             });
 
@@ -38,14 +37,14 @@ describe('Preview action', () => {
                 expect(createdPreview).to.exist;
                 expect(createdPreview).to.be.string;
                 expect(path.isAbsolute(createdPreview)).to.be.true;
-                expect(await helpers.checkFileExist(createdPreview));
+                expect(await helpers.isFileExist(createdPreview)).to.be.true;
             });
         });
 
         context('When video is mp4 format', () => {
 
             beforeEach(async () => {
-                await del(path.join(videosDirectory,'*'));
+                await del(path.join(videosDirectory, '*'));
                 fs.copyFileSync(mp4Sample, mp4);
             });
 
@@ -54,14 +53,14 @@ describe('Preview action', () => {
                 expect(createdPreview).to.exist;
                 expect(createdPreview).to.be.string;
                 expect(path.isAbsolute(createdPreview)).to.be.true;
-                expect(await helpers.checkFileExist(createdPreview));
+                expect(await helpers.isFileExist(createdPreview)).to.be.true;
             });
         });
 
         context('When video is mkv format', () => {
 
             beforeEach(async () => {
-                await del(path.join(videosDirectory,'*'));
+                await del(path.join(videosDirectory, '*'));
                 fs.copyFileSync(mkvSample, mkv);
             });
 
@@ -70,14 +69,14 @@ describe('Preview action', () => {
                 expect(createdPreview).to.exist;
                 expect(createdPreview).to.be.string;
                 expect(path.isAbsolute(createdPreview)).to.be.true;
-                expect(await helpers.checkFileExist(createdPreview));
+                expect(await helpers.isFileExist(createdPreview)).to.be.true;
             });
         });
 
         context('When video is not exist', () => {
 
             beforeEach(async () => {
-                await del(path.join(videosDirectory,'*'));
+                await del(path.join(videosDirectory, '*'));
             });
 
             it('should throw error when video is not exist', async () => {
@@ -91,7 +90,7 @@ describe('Preview action', () => {
                     expect(hasThrown).to.be.true;
                 }
             });
-        
+
         });
     });
 });

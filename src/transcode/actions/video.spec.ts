@@ -37,7 +37,7 @@ describe('Video action', () => {
                 expect(transcodedVideo).to.exist;
                 expect(transcodedVideo).to.be.string;
                 expect(path.isAbsolute(transcodedVideo)).to.be.true;
-                expect(await helpers.checkFileExist(transcodedVideo));
+                expect(await helpers.isFileExist(transcodedVideo)).to.be.true;
             });
         });
 
@@ -53,7 +53,7 @@ describe('Video action', () => {
                 expect(transcodedVideo).to.exist;
                 expect(transcodedVideo).to.be.string;
                 expect(path.isAbsolute(transcodedVideo)).to.be.true;
-                expect(await helpers.checkFileExist(transcodedVideo));
+                expect(await helpers.isFileExist(transcodedVideo)).to.be.true;
             });
         });
 
@@ -69,7 +69,7 @@ describe('Video action', () => {
                 expect(transcodedVideo).to.exist;
                 expect(transcodedVideo).to.be.string;
                 expect(path.isAbsolute(transcodedVideo)).to.be.true;
-                expect(await helpers.checkFileExist(transcodedVideo));
+                expect(await helpers.isFileExist(transcodedVideo)).to.be.true;
             });
         });
 

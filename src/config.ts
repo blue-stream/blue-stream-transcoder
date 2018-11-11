@@ -30,6 +30,7 @@ export const config = {
         region: process.env.REGION || 'us-east-1',
         bucket: process.env.BUCKET || 'blue-stream-test',
         isPathStyle: process.env.IS_PATH_STYLE === '1' ? true : false,
+        isPublicBucket: process.env.IS_PUBLIC_BUCKET === '1' ? true : false,
         endpoint: process.env.ENDPOINT || '',
     },
     preview: {

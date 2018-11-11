@@ -1,32 +1,27 @@
 import { TranscodeManager } from './transcode.manager';
 import { S3Bucket } from '../utils/s3Bucket';
-import * as rabbit from 'rabbit-lite';
 import { config } from '../config';
 import * as path from 'path';
-import * as del from 'del';
-import * as helpers from '../utils/helpers';
 
 export class TranscodeController {
 
-    static async transcode(originKey: string): Promise<void> {
+    static async transcode(originKey: string): Promise<string[]> {
         const videosDirectory = config.videosDirectory;
         const bucket = config.s3.enable ? new S3Bucket() : undefined;
         const originPath = path.join(videosDirectory, originKey);
         try {
-            if (bucket) await bucket.download(originKey, videosDirectory);
+            await TranscodeManager.assertVideo(originPath, bucket);
 
-            await helpers.checkFileExist(originPath);
+            let products: string[] = await TranscodeManager.execActions(originPath);
 
-            const products: string[] = await TranscodeManager.execActions(originPath);
+            if (bucket) products = await TranscodeManager.uploadProducts(products, bucket);
 
-            if (bucket) await products.map(product => bucket.upload(product));
-
-            if (!(path.extname(originKey) === config.video.extention)) {
-                await (bucket ? bucket.delete(originKey) : del(originPath));
+            if (!(path.extname(originPath) === config.video.extention)) {
+                await TranscodeManager.deleteOriginVideo(originPath, bucket);
             }
-
+            return products;
         } finally {
-            if (bucket) await del(helpers.changeExtention(originPath, '.*'));
+            if (bucket) await TranscodeManager.deleteTempFiles(originPath);
         }
     }
 
