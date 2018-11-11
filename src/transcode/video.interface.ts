@@ -1,4 +1,4 @@
 export interface IVideo {
-    id?: string;
+    id: string;
     path: string;
 }

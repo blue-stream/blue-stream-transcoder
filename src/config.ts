@@ -1,48 +1,8 @@
-export type Configuration = {
-    logger: {
-        durable: boolean;
-        exchangeType: string;
-        exchange: string;
-        host: string;
-        port: number;
-        password: string;
-        username: string;
-        persistent: boolean;
-    };
-    rabbitMQ: {
-        host: string;
-        port: number;
-        password: string;
-        username: string;
-    };
-    server: {
-        port: number,
-        name: string,
-    };
-    s3: {
-        accessKeyId: string;
-        region: string;
-        secretAccessKey: string;
-        bucket: string;
-        isPathStyle: boolean;
-        endpoint: string;
-    };
-    preview: {
-        size: string;
-        offsetPercent: number;
-        time: number;
-    };
-    thumbnail: {
-        size: string;
-    };
-    video: {
-        videoCodec: string;
-        audioCodec: string;
-        format: string;
-    };
-};
+import * as path from 'path';
 
-export const config: Configuration = {
+export const config = {
+    sampleVideosDirectory: path.join(process.cwd(), 'sample-videos'),
+    videosDirectory: path.join(process.cwd(), 'videos'),
     logger: {
         durable: false,
         exchangeType: process.env.RMQ_LOGGER_TYPE || 'topic',
@@ -64,11 +24,13 @@ export const config: Configuration = {
         name: 'transcode',
     },
     s3: {
+        enable: true,
         accessKeyId: process.env.ACCESS_KEY_ID || 'AKIAINJAWB5EF2QRFR7Q',
         secretAccessKey: process.env.SECRET_ACCESS_KEY || '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',
         region: process.env.REGION || 'us-east-1',
         bucket: process.env.BUCKET || 'blue-stream-test',
-        isPathStyle: process.env.IS_PATH_STYLE === '1' ? true : false,
+        isPathStyle: (process.env.IS_PATH_STYLE || '0') === '1' ? true : false,
+        isPublicBucket: (process.env.IS_PUBLIC_BUCKET || '1') === '1' ? true : false,
         endpoint: process.env.ENDPOINT || '',
     },
     preview: {
@@ -80,8 +42,8 @@ export const config: Configuration = {
         size: process.env.thumbnailSize || '320x180',
     },
     video: {
-        videoCodec: process.env.videoCodec || 'aac',
-        audioCodec: process.env.audioCodec || 'libx264',
-        format: process.env.format || 'mp4',
+        videoCodec: process.env.videoCodec || 'libx264',
+        audioCodec: process.env.audioCodec || 'aac',
+        extention: process.env.format || '.mp4',
     },
 };
