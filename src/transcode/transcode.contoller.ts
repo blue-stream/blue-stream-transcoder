@@ -13,14 +13,14 @@ export class TranscodeController {
         try {
             await TranscodeManager.checkIfInProcess(originPath, bucket);
             await TranscodeManager.assertVideo(originPath, bucket);
-            if (!(path.extname(originPath) === config.video.extention)) {
+            if (path.extname(originPath) === config.video.extention) {
                 products = await TranscodeManager.execActionsWithoutVideo(originPath);
-                await TranscodeManager.deleteOriginVideo(originPath, bucket);
                 if (bucket) products = await TranscodeManager.uploadProducts(products, bucket);
+                products.push(originKey);
             } else {
                 products = await TranscodeManager.execActions(originPath);
                 if (bucket) products = await TranscodeManager.uploadProducts(products, bucket);
-                products.push(originKey);
+                await TranscodeManager.deleteOriginVideo(originPath, bucket);
             }
 
             return products;
