@@ -4,7 +4,7 @@ import * as ffmpeg from 'fluent-ffmpeg';
 import * as path from 'path';
 
 export class Thumbnail {
-    private static size: string = config.thumbnail.size;
+    private static readonly size: string = config.thumbnail.size;
 
     public static async create(videoPath: string): Promise<string> {
         return await Thumbnail.process(

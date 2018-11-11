@@ -5,9 +5,9 @@ import { Command, stdType } from '../../utils/command';
 import * as path from 'path';
 
 export class Preview {
-    private static size: string = config.preview.size;
-    private static time: number = config.preview.time;
-    private static offsetPercent: number = config.preview.offsetPercent;
+    private static readonly size: string = config.preview.size;
+    private static readonly time: number = config.preview.time;
+    private static readonly offsetPercent: number = config.preview.offsetPercent;
 
     public static async create(videoPath: string): Promise<string> {
         const [sourcePath, destPath] = [

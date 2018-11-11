@@ -41,8 +41,8 @@ export const config = {
         size: process.env.thumbnailSize || '320x180',
     },
     video: {
-        videoCodec: process.env.videoCodec || 'aac',
-        audioCodec: process.env.audioCodec || 'libx264',
+        videoCodec: process.env.videoCodec || 'libx264',
+        audioCodec: process.env.audioCodec || 'aac',
         extention: process.env.format || '.mp4',
     },
 };

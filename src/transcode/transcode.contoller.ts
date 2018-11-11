@@ -7,11 +7,10 @@ import * as del from 'del';
 import * as helpers from '../utils/helpers';
 
 export class TranscodeController {
-    static bucket: S3Bucket | undefined = config.s3.enable ? new S3Bucket() : undefined;
 
     static async transcode(originKey: string): Promise<void> {
         const videosDirectory = config.videosDirectory;
-        const bucket = TranscodeController.bucket;
+        const bucket = config.s3.enable ? new S3Bucket() : undefined;
         const originPath = path.join(videosDirectory, originKey);
         try {
             if (bucket) await bucket.download(originKey, videosDirectory);
@@ -20,11 +19,10 @@ export class TranscodeController {
 
             const products: string[] = await TranscodeManager.execActions(originPath);
 
-            if (bucket) {
-                await products.map(product => bucket.upload(product));
-                await bucket.delete(originKey);
-            } else {
-                if (!(path.extname(originKey) === config.video.extention)) await del(originPath);
+            if (bucket) await products.map(product => bucket.upload(product));
+
+            if (!(path.extname(originKey) === config.video.extention)) {
+                await (bucket ? bucket.delete(originKey) : del(originPath));
             }
 
         } finally {

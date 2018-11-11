@@ -4,9 +4,9 @@ import * as ffmpeg from 'fluent-ffmpeg';
 import * as path from 'path';
 
 export class Video {
-    private static audioCodec: string = config.video.audioCodec;
-    private static videoCodec: string = config.video.videoCodec;
-    private static format: string = config.video.extention;
+    private static readonly audioCodec: string = config.video.audioCodec;
+    private static readonly videoCodec: string = config.video.videoCodec;
+    private static readonly format: string = config.video.extention;
 
     public static async transcode(videoPath: string) : Promise<string> {
         return await Video.process(
@@ -20,7 +20,7 @@ export class Video {
             ffmpeg(sourcePath)
             .audioCodec(this.audioCodec)
             .videoCodec(this.videoCodec)
-            .format(this.format)
+            .format(this.format.slice(1))
             .save(destPath)
             .on('end', function () {
                 return resolv(destPath);
