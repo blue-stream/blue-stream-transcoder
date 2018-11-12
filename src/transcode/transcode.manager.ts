@@ -7,7 +7,6 @@ import { config } from '../config';
 import * as helpers from '../utils/helpers';
 import * as del from 'del';
 
-
 export class TranscodeManager {
     public static execActions(videoPath: string): Promise<string[]> {
         return Promise.all([
@@ -42,15 +41,5 @@ export class TranscodeManager {
 
     public static async uploadProducts(products: string[], bucket: S3Bucket) {
         return Promise.all(products.map(product => bucket.upload(product)));
-    }
-
-    public static async checkIfInProcess(videoPath: string, bucket?: S3Bucket) {
-         const isExist = (await Promise.all([
-            helpers.isFileExist(helpers.changeExtention(videoPath, '.png')),
-            helpers.isFileExist(helpers.changeExtention(videoPath, '.gif')),
-            bucket ? helpers.isFileExist(videoPath) : false,
-         ])).indexOf(true);
-         if(isExist == -1) return true;
-         return new Error('The video already in process');
     }
 }

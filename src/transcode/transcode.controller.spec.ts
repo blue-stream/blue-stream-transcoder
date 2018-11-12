@@ -46,7 +46,7 @@ describe('Transcode Controller', () => {
                 expect(productsExistInBucket).to.be.an('array');
                 expect(productsExistInBucket).to.deep.equal([true, true, true]);
 
-                const productsExistInDir = await Promise.all(products.map(product => helpers.isFileExist(product)));
+                const productsExistInDir = await Promise.all(products.map(product => helpers.isFileExist(path.join(videosDirectory, product))));
                 expect(productsExistInDir).to.be.an('array');
                 expect(productsExistInDir).to.deep.equal([false, false, false]);
 
@@ -67,11 +67,11 @@ describe('Transcode Controller', () => {
 
                 const productsExistInBucket = await Promise.all(products.map(product => bucket.isKeyExist(product)));
                 expect(productsExistInBucket).to.be.an('array');
-                expect(productsExistInBucket).to.deep.equal([true, true]);
+                expect(productsExistInBucket).to.deep.equal([true, true, true]);
 
-                const productsExistInDir = await Promise.all(products.map(product => helpers.isFileExist(product)));
+                const productsExistInDir = await Promise.all(products.map(product => helpers.isFileExist(path.join(videosDirectory, product))));
                 expect(productsExistInDir).to.be.an('array');
-                expect(productsExistInDir).to.deep.equal([false, false]);
+                expect(productsExistInDir).to.deep.equal([false, false, false]);
 
                 const isOriginVideoExist = await helpers.isFileExist(mp4Path);
                 expect(isOriginVideoExist).to.be.false;

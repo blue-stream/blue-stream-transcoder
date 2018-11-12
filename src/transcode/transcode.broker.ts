@@ -17,14 +17,14 @@ export class TranscodeBroker {
                                        const products: string[] = await TranscodeController.transcode((video as IUploadedVideo).key);
                                        const newVideo: ITranscodedVideo  = {
                                            id: (video as IUploadedVideo).id,
-                                           thumbnailPath: products[0], 
-                                           previewPath: products[1], 
-                                           videoPath: products[2] 
-                                       }
-                                       rabbit.publish('application', 'video.transcode.finish', newVideo);
+                                           thumbnailPath: products[0],
+                                           previewPath: products[1],
+                                           videoPath: products[2],
+                                       };
+                                       rabbit.publish('application', 'transcoder.transcode.finish', newVideo);
                                    } catch (error) {
-                                       rabbit.publish('application', 'video.transcode.failed', video);
-                                       throw new Error(error);
+                                       rabbit.publish('application', 'transcoder.transcode.failed', video);
+                                       throw error;
                                    }
                                },
                             );
