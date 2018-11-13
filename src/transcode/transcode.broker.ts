@@ -11,7 +11,7 @@ export class TranscodeBroker {
 
     public static async subscribe() {
         await rabbit.subscribe('transcoder-transcode-queue',
-                               { exchange : 'application', pattern : 'video.upload.finish' },
+                               { exchange : 'application', pattern : 'video.upload.succeeded' },
                                async (video: Object) => {
                                    try {
                                        const products: string[] = await TranscodeController.transcode((video as IUploadedVideo).key);
@@ -21,7 +21,7 @@ export class TranscodeBroker {
                                            previewPath: products[1],
                                            videoPath: products[2],
                                        };
-                                       rabbit.publish('application', 'transcoder.transcode.finish', newVideo);
+                                       rabbit.publish('application', 'transcoder.transcode.succeeded', newVideo);
                                    } catch (error) {
                                        rabbit.publish('application', 'transcoder.transcode.failed', video);
                                        throw error;

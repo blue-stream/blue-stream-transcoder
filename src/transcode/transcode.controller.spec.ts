@@ -42,6 +42,13 @@ describe('Transcode Controller', () => {
             it('should transcode and delete temp files and origin video', async () => {
                 const products: string[] = await TranscodeController.transcode(flv);
 
+                expect(products).to.be.an('array');
+                expect(products).to.deep.equal([
+                    helpers.changeExtention(flv, '.png'),
+                    helpers.changeExtention(flv, '.gif'),
+                    helpers.changeExtention(flv, config.video.extention),
+                ]);
+
                 const productsExistInBucket = await Promise.all(products.map(product => bucket.isKeyExist(product)));
                 expect(productsExistInBucket).to.be.an('array');
                 expect(productsExistInBucket).to.deep.equal([true, true, true]);
@@ -64,6 +71,13 @@ describe('Transcode Controller', () => {
 
             it('should transcode and delete temp files and origin video', async () => {
                 const products: string[] = await TranscodeController.transcode(mp4);
+
+                expect(products).to.be.an('array');
+                expect(products).to.deep.equal([
+                    helpers.changeExtention(mp4, '.png'),
+                    helpers.changeExtention(mp4, '.gif'),
+                    helpers.changeExtention(mp4, config.video.extention),
+                ]);
 
                 const productsExistInBucket = await Promise.all(products.map(product => bucket.isKeyExist(product)));
                 expect(productsExistInBucket).to.be.an('array');
