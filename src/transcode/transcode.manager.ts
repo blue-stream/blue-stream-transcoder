@@ -9,14 +9,15 @@ import * as del from 'del';
 
 export class TranscodeManager {
     public static execActions(videoPath: string): Promise<string[]> {
-        if (path.extname(videoPath) === config.video.extention) {
-            return Promise.all([
-                Thumbnail.create(videoPath),
-                Preview.create(videoPath),
-            ]);
-        }
         return Promise.all([
+            Thumbnail.create(videoPath),
+            Preview.create(videoPath),
             Video.transcode(videoPath),
+        ]);
+    }
+
+    public static execActionsWithoutVideo(videoPath: string) {
+        return Promise.all([
             Thumbnail.create(videoPath),
             Preview.create(videoPath),
         ]);
