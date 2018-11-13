@@ -7,5 +7,5 @@ export interface ITranscodedVideo {
     id: string;
     thumbnailPath: string;
     previewPath: string;
-    videoPath: string
+    contentPath: string;
 }

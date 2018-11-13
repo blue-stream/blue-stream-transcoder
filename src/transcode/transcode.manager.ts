@@ -8,6 +8,8 @@ import * as helpers from '../utils/helpers';
 import * as del from 'del';
 
 export class TranscodeManager {
+    private static inProcess:string[] = [];
+
     public static execActions(videoPath: string): Promise<string[]> {
         return Promise.all([
             Thumbnail.create(videoPath),
@@ -41,5 +43,17 @@ export class TranscodeManager {
 
     public static async uploadProducts(products: string[], bucket: S3Bucket) {
         return Promise.all(products.map(product => bucket.upload(product)));
+    }
+
+    public static startJob(originKey: string) {
+        const index = this.inProcess.indexOf(originKey);
+        if (index < 0) this.inProcess.push(originKey);
+        else throw new Error('the video is already in process');
+        return index;
+    }
+
+    public static finishJob(index: number) {
+        this.inProcess.splice(index, 1);
+        return index;
     }
 }

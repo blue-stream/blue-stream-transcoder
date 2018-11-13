@@ -12,14 +12,14 @@ export class TranscodeBroker {
     public static async subscribe() {
         await rabbit.subscribe('transcoder-transcode-queue',
                                { exchange : 'application', pattern : 'video.upload.succeeded' },
-                               async (video: Object) => {
+                               async (video: any) => {
                                    try {
                                        const products: string[] = await TranscodeController.transcode((video as IUploadedVideo).key);
                                        const newVideo: ITranscodedVideo  = {
                                            id: (video as IUploadedVideo).id,
                                            thumbnailPath: products[0],
                                            previewPath: products[1],
-                                           videoPath: products[2],
+                                           contentPath: products[2],
                                        };
                                        rabbit.publish('application', 'transcoder.transcode.succeeded', newVideo);
                                    } catch (error) {
