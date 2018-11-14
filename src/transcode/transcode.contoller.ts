@@ -22,6 +22,7 @@ export class TranscodeController {
                     productsKeys.push(originKey);
                     return productsKeys;
                 }
+                productsPaths.push(originPath);
                 return productsPaths;
             } 
 
