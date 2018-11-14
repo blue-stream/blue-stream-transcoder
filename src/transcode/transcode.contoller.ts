@@ -11,7 +11,7 @@ export class TranscodeController {
         const jobIndex = TranscodeManager.startJob(originKey);
 
         const wishedOriginPath = path.join(videosDirectory, originKey);
-        
+
         try {
             const originPath = await TranscodeManager.assertVideo(wishedOriginPath, bucket);
 
@@ -24,7 +24,7 @@ export class TranscodeController {
                 }
                 productsPaths.push(originPath);
                 return productsPaths;
-            } 
+            }
 
             const productsPaths = await TranscodeManager.execActions(originPath);
 
