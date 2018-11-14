@@ -1,7 +1,7 @@
 FROM node:latest
 
 # Install Video and Animation Transcoders
-COPY install-script.sh ./install-script.sh
+COPY install-script.sh .
 
 RUN . ./install-script.sh
 ########
