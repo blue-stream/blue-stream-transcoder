@@ -1,4 +1,4 @@
-import * as rabbit from 'rabbit-lite';
+import * as rabbit from './utils/rabbit';
 import { Logger } from './utils/logger';
 import { config } from './config';
 import { syslogSeverityLevels } from 'llamajs';
@@ -30,15 +30,8 @@ process.on('SIGINT', async () => {
 (async () => {
     await helpers.createDirectory(config.videosDirectory);
     Logger.configure();
-    Logger.log(syslogSeverityLevels.Informational, 'Server Started', `Port: ${config.server.port}`);
-    rabbit.configure({
-        username : config.rabbitMQ.username,
-        password : config.rabbitMQ.password,
-        port : config.rabbitMQ.port,
-        host : config.rabbitMQ.host,
-    });
     await rabbit.connect();
-    await TranscodeBroker.assertExchanges();
     await TranscodeBroker.subscribe();
     console.log('Starting server');
+    Logger.log(syslogSeverityLevels.Informational, 'Server Started', 'Rabbitmq connected');
 })();
