@@ -20,7 +20,6 @@ export const config = {
         username: process.env.RMQ_USERNAME || 'guest',
     },
     server: {
-        port: 3000,
         name: 'transcode',
     },
     s3: {
