@@ -11,7 +11,7 @@ export class TranscodeBroker {
         'application',
         'topic',
         'transcoder-transcode-queue',
-        'video.upload.succeeded',
+        'video.video.upload.succeeded',
         async (video: any) => {
             try {
                 const products: string[] = await TranscodeController.transcode((video as IUploadedVideo).key);
@@ -21,9 +21,9 @@ export class TranscodeBroker {
                     previewPath: products[1],
                     contentPath: products[2],
                 };
-                rabbit.publish('application', 'transcoder.transcode.succeeded', newVideo);
+                rabbit.publish('application', 'transcoder.video.transcode.succeeded', newVideo);
             } catch (error) {
-                rabbit.publish('application', 'transcoder.transcode.failed', video);
+                rabbit.publish('application', 'transcoder.video.transcode.failed', video);
                 throw error;
             }
         },
