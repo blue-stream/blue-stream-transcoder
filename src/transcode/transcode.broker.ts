@@ -11,7 +11,7 @@ export class TranscodeBroker {
         'application',
         'topic',
         'transcoder-transcode-queue',
-        'video.video.upload.succeeded',
+        'videoService.video.upload.succeeded',
         async (video: any) => {
             try {
                 const products: string[] = await TranscodeController.transcode((video as IUploadedVideo).key);
