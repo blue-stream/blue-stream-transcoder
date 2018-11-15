@@ -24,13 +24,14 @@ export const config = {
     },
     s3: {
         enable: true,
-        accessKeyId: process.env.ACCESS_KEY_ID || 'AKIAINJAWB5EF2QRFR7Q',
-        secretAccessKey: process.env.SECRET_ACCESS_KEY || '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',
-        region: process.env.REGION || 'us-east-1',
-        bucket: process.env.BUCKET || 'blue-stream-test',
-        isPathStyle: (process.env.IS_PATH_STYLE || '0') === '1' ? true : false,
-        isPublicBucket: (process.env.IS_PUBLIC_BUCKET || '1') === '1' ? true : false,
-        endpoint: process.env.ENDPOINT || '',
+        accessKeyId: process.env.S3_ACCESS_KEY_ID || 'AKIAINJAWB5EF2QRFR7Q',
+        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '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',
+        region: process.env.S3_REGION || 'us-east-1',
+        bucket: process.env.S3_BUCKET || 'blue-stream-test',
+        isPathStyle: (process.env.S3_IS_PATH_STYLE || '1') === '1' ? true : false,
+        isPublicBucket: (process.env.S3_IS_PUBLIC_BUCKET || '0') === '1' ? true : false,
+        endpoint: process.env.S3_ENDPOINT || '',
+        version: process.env.S3_VERSION || 'v4'
     },
     preview: {
         size: process.env.previewSize || '320x180',
