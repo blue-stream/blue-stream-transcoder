@@ -12,7 +12,7 @@ export class S3Bucket {
             accessKeyId: config.s3.accessKeyId,
             region: config.s3.region,
             secretAccessKey: config.s3.secretAccessKey,
-            signatureVersion: 'v3',
+            signatureVersion: config.s3.version,
             s3ForcePathStyle: config.s3.isPathStyle,
         };
         if (config.s3.endpoint) s3Config.endpoint = config.s3.endpoint;
