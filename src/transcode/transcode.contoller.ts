@@ -30,10 +30,10 @@ export class TranscodeController {
 
             if (bucket) {
                 const productsKeys = await TranscodeManager.uploadProducts(productsPaths, bucket);
-                await TranscodeManager.deleteOriginVideo(originPath, bucket);
+                // await TranscodeManager.deleteOriginVideo(originKey, bucket);
                 return productsKeys;
             }
-            await TranscodeManager.deleteOriginVideo(originPath, bucket);
+            // await TranscodeManager.deleteOriginVideo(originPath, bucket);
             return productsPaths;
 
         } finally {
