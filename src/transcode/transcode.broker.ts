@@ -21,9 +21,9 @@ export class TranscodeBroker {
                     previewPath: products[1],
                     contentPath: products[2],
                 };
-                rabbit.publish('application', 'transcoder.video.transcode.succeeded', newVideo);
+                rabbit.publish('application', 'topic', 'transcoder.video.transcode.succeeded', newVideo);
             } catch (error) {
-                rabbit.publish('application', 'transcoder.video.transcode.failed', video);
+                rabbit.publish('application', 'topic', 'transcoder.video.transcode.failed', video);
                 throw error;
             }
         },
