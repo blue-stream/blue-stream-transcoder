@@ -43,7 +43,7 @@ export class S3Bucket {
         };
         // Upload func use multi-part in parallel while putObject not.
         // Notice that in order to upload to public bucket, you can't use multi-part
-        await (config.s3.isPublicBucket === true ?
+        await (config.s3.isPublicBucket ?
         this.s3.putObject(params).promise() :
         this.s3.upload(params).promise());
         return path.basename(srcPath);

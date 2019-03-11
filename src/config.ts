@@ -31,7 +31,7 @@ export const config = {
         isPathStyle: (process.env.S3_IS_PATH_STYLE || '1') === '1' ? true : false,
         isPublicBucket: (process.env.S3_IS_PUBLIC_BUCKET || '0') === '1' ? true : false,
         endpoint: process.env.S3_ENDPOINT || '',
-        version: process.env.S3_VERSION || 'v4'
+        version: process.env.S3_VERSION || 'v4',
     },
     preview: {
         size: process.env.previewSize || '320x180',
