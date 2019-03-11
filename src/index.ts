@@ -1,9 +1,8 @@
 import * as rabbit from './utils/rabbit';
-import { Logger } from './utils/logger';
 import { config } from './config';
-import { syslogSeverityLevels } from 'llamajs';
 import { TranscodeBroker } from './transcode/transcode.broker';
 import * as helpers from './utils/helpers';
+import logger from './utils/logger';
 
 process.on('uncaughtException', (err) => {
     console.error('Unhandled Exception', err.stack);
@@ -29,9 +28,8 @@ process.on('SIGINT', async () => {
 
 (async () => {
     await helpers.createDirectory(config.videosDirectory);
-    Logger.configure();
     await rabbit.connect();
     await TranscodeBroker.subscribe();
     console.log('Starting server');
-    Logger.log(syslogSeverityLevels.Informational, 'Server Started', 'Rabbitmq connected');
+    logger.verbose('Server Started: Rabbitmq connected')
 })();

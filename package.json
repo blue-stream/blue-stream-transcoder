@@ -34,6 +34,8 @@
     "del": "^3.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "llamajs": "^0.2.0",
-    "rabbit-lite": "^0.1.2"
+    "rabbit-lite": "^0.1.2",
+    "winston": "^3.2.1",
+    "winston-elasticsearch": "^0.7.9"
   }
 }
