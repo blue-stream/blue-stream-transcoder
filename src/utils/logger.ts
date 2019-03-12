@@ -7,7 +7,7 @@ const indexTemplateMapping = require('winston-elasticsearch/index-template-mappi
 indexTemplateMapping.index_patterns = 'blue-stream-logs-*';
 
 const logger = winston.createLogger({
-    defaultMeta: { service: config.server.name, hostname: os.hostname() }
+    defaultMeta: { service: config.server.name, hostname: os.hostname() },
 });
 
 if (config.logger.elasticsearch.hosts) {
@@ -17,9 +17,9 @@ if (config.logger.elasticsearch.hosts) {
         clientOps: config.logger.elasticsearch,
         bufferLimit: 100,
         ensureMappingTemplate: true,
-        mappingTemplate: indexTemplateMapping
+        mappingTemplate: indexTemplateMapping,
     });
-    logger.add(elasticsearch)
+    logger.add(elasticsearch);
 } else {
     const winstonConsole = new winston.transports.Console({
         level: 'silly',
@@ -28,4 +28,3 @@ if (config.logger.elasticsearch.hosts) {
 }
 
 export default logger;
-
