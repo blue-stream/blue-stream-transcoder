@@ -2,7 +2,7 @@ import * as rabbit from './utils/rabbit';
 import { config } from './config';
 import { TranscodeBroker } from './transcode/transcode.broker';
 import * as helpers from './utils/helpers';
-import logger from './utils/logger';
+import { Log, logger } from './utils/logger';
 
 process.on('uncaughtException', (err) => {
     console.error('Unhandled Exception', err.stack);
@@ -31,5 +31,5 @@ process.on('SIGINT', async () => {
     await rabbit.connect();
     await TranscodeBroker.subscribe();
     console.log('Starting server');
-    logger.verbose('Server Started: Rabbitmq connected')
+    logger.verbose(Log('Server Started', 'Rabbitmq connected'));
 })();

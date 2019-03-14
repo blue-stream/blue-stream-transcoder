@@ -4,8 +4,8 @@ export const config = {
     sampleVideosDirectory: path.join(process.cwd(), 'sample-videos'),
     videosDirectory: path.join(process.cwd(), 'videos'),
     logger: {
-        elasticsearch: {
-            hosts: process.env.LOGGER_ELASTICSEARCH && process.env.LOGGER_ELASTICSEARCH.split(','),
+        elasticsearch: process.env.LOGGER_ELASTICSEARCH && {
+            hosts: process.env.LOGGER_ELASTICSEARCH.split(','),
         },
     },
     rabbitMQ: {

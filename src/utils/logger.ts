@@ -6,11 +6,11 @@ import { config } from '../config';
 const indexTemplateMapping = require('winston-elasticsearch/index-template-mapping.json');
 indexTemplateMapping.index_patterns = 'blue-stream-logs-*';
 
-const logger = winston.createLogger({
+export const logger = winston.createLogger({
     defaultMeta: { service: config.server.name, hostname: os.hostname() },
 });
 
-if (config.logger.elasticsearch.hosts) {
+if (config.logger.elasticsearch) {
     const elasticsearch = new Elasticsearch({
         indexPrefix: 'blue-stream-logs',
         level: 'verbose',
@@ -23,8 +23,16 @@ if (config.logger.elasticsearch.hosts) {
 } else {
     const winstonConsole = new winston.transports.Console({
         level: 'silly',
+        format: winston.format.combine(
+            winston.format.timestamp({
+                format: 'YYYY-MM-DD HH:mm:ss',
+            }),
+            winston.format.json(),
+        ),
     });
     logger.add(winstonConsole);
 }
 
-export default logger;
+export const Log = (name: string, description: string, correlationId?: string, user?: string, more?: any) => {
+    return { name, description, correlationId, user, ...more };
+};
