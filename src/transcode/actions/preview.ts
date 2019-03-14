@@ -1,8 +1,6 @@
-import * as ffmpeg from 'fluent-ffmpeg';
 import { config } from '../../config';
 import * as helpers from '../../utils/helpers';
 import { Command, stdType } from '../../utils/command';
-import * as path from 'path';
 
 export class Preview {
     private static readonly size: string = config.preview.size;
