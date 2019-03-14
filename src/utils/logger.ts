@@ -33,6 +33,6 @@ if (config.logger.elasticsearch) {
     logger.add(winstonConsole);
 }
 
-export const Log = (name: string, description: string, correlationId?: string, user?: string, more?: any) => {
-    return { name, description, correlationId, user, ...more };
+export const log = (severity: string, name: string, description: string, correlationId?: string, user?: string, more?: any) => {
+    logger.log(severity, { name, description, correlationId, user, ...more });
 };
