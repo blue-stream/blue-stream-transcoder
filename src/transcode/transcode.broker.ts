@@ -1,6 +1,4 @@
 import * as rabbit from '../utils/rabbit';
-import * as amqp from 'amqplib';
-import { config } from '../config';
 import { TranscodeController } from './transcode.contoller';
 import { IUploadedVideo, ITranscodedVideo } from './video.interface';
 

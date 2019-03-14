@@ -4,14 +4,9 @@ export const config = {
     sampleVideosDirectory: path.join(process.cwd(), 'sample-videos'),
     videosDirectory: path.join(process.cwd(), 'videos'),
     logger: {
-        durable: false,
-        exchangeType: process.env.RMQ_LOGGER_TYPE || 'topic',
-        exchange: process.env.RMQ_LOGGER_EXCHANGE || 'blue_stream_logs',
-        host: process.env.RMQ_LOGGER_HOST || 'localhost',
-        port: +(process.env.RMQ_LOGGER_PORT || 15672),
-        password: process.env.RMQ_LOGGER_PASS || 'guest',
-        username: process.env.RMQ_LOGGER_USER || 'guest',
-        persistent: false,
+        elasticsearch: process.env.LOGGER_ELASTICSEARCH && {
+            hosts: process.env.LOGGER_ELASTICSEARCH.split(','),
+        },
     },
     rabbitMQ: {
         host: process.env.RMQ_HOST || 'localhost',
@@ -29,9 +24,8 @@ export const config = {
         region: process.env.S3_REGION || 'us-east-1',
         bucket: process.env.S3_BUCKET || 'blue-stream-test',
         isPathStyle: (process.env.S3_IS_PATH_STYLE || '1') === '1' ? true : false,
-        isPublicBucket: (process.env.S3_IS_PUBLIC_BUCKET || '0') === '1' ? true : false,
         endpoint: process.env.S3_ENDPOINT || '',
-        version: process.env.S3_VERSION || 'v4'
+        version: process.env.S3_VERSION || 'v4',
     },
     preview: {
         size: process.env.previewSize || '320x180',
