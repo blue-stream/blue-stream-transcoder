@@ -1,10 +1,11 @@
 {
-  "name": "blue-stream-template",
+  "name": "blue-stream-transcoder",
   "version": "0.0.1",
-  "description": "Blue Stream micro-service template for future services",
+  "description": "Blue Stream micro-service for transcoding",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && node ./dist/index.js",
+    "build": "tsc",
+    "start": "node ./dist/index.js",
     "pre:install": ". ./install-script.sh",
     "test": "cross-env NODE_ENV=test mocha --recursive -r ts-node/register src/**/**/*.spec.ts src/**/*.spec.ts --exit --timeout 0",
     "test:coverage": "cross-env NODE_ENV=test nyc npm test",
