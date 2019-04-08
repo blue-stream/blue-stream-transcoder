@@ -30,7 +30,7 @@ export const config = {
     preview: {
         size: process.env.previewSize || '320x180',
         offsetPercent: +(process.env.previewOffsetPercent || 0.3),
-        time: +(process.env.previewTime || 3),
+        time: +(process.env.previewTime || 6),
     },
     thumbnail: {
         size: process.env.thumbnailSize || '320x180',
