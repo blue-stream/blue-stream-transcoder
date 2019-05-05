@@ -2,6 +2,7 @@ import { TranscodeManager } from './transcode.manager';
 import { S3Bucket } from '../utils/s3Bucket';
 import { config } from '../config';
 import * as path from 'path';
+import { log } from '../utils/logger';
 
 export class TranscodeController {
 
@@ -31,13 +32,26 @@ export class TranscodeController {
             if (bucket) {
                 const productsKeys = await TranscodeManager.uploadProducts(productsPaths, bucket);
                 // await TranscodeManager.deleteOriginVideo(originKey, bucket);
+                log('info' , 'File transcoded', `file with key ${originKey} was transcoded`, '', 'unknown');
                 return productsKeys;
             }
             // await TranscodeManager.deleteOriginVideo(originPath, bucket);
+            log('info' , 'File transcoded', `file with key ${originKey} was transcoded`, '', 'unknown');
             return productsPaths;
 
+        }
+        catch(error) {
+            log('warn' , 'File transode failure', `file with key ${originKey} failed transcoding with error: ${error}`, '', 'unknown');
+            throw error;
         } finally {
-            if (bucket) await TranscodeManager.deleteTempFiles(wishedOriginPath);
+            if (bucket) {
+                try {
+                    await TranscodeManager.deleteTempFiles(wishedOriginPath);
+                    log('verbose' , 'Delete temp files', `delete temp files of ${originKey}`, '', 'unknown');
+                } catch(error) {
+                    log('error' , 'Delete temp files failure', `delete temp files of ${originKey} failed with error: ${error}`, '', 'unknown');
+                }
+            }
             TranscodeManager.finishJob(jobIndex);
         }
     }
