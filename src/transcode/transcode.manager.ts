@@ -2,8 +2,6 @@ import { S3Bucket } from '../utils/s3Bucket';
 import { Video } from './actions/video';
 import { Thumbnail } from './actions/thumbnail';
 import { Preview } from './actions/preview';
-import * as path from 'path';
-import { config } from '../config';
 import * as helpers from '../utils/helpers';
 import * as del from 'del';
 

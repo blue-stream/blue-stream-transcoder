@@ -1,6 +1,7 @@
 import * as rabbit from '../utils/rabbit';
 import { TranscodeController } from './transcode.contoller';
 import { IUploadedVideo, ITranscodedVideo } from './video.interface';
+import { config } from '../config';
 
 export class TranscodeBroker {
 
@@ -36,7 +37,7 @@ export class TranscodeBroker {
                     durable: true,
                 },
                 channel: {
-                    prefetch: 1,
+                    prefetch: config.parallelTranscode,
                 },
             }
         );

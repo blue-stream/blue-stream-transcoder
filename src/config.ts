@@ -41,4 +41,5 @@ export const config = {
         audioCodec: process.env.audioCodec || 'aac',
         extention: process.env.format || '.mp4',
     },
+    parallelTranscode: +(process.env.parallelTranscode || 1),
 };
