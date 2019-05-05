@@ -29,17 +29,17 @@ export const config = {
         version: process.env.S3_VERSION || 'v4',
     },
     preview: {
-        size: process.env.TCR_PREVIEW_SIZE || '320x180',
-        offsetPercent: +(process.env.TCR_PREVIEW_OFFSET_PERCENT || 0.3),
-        time: +(process.env.TCR_PREVIEW_TIME || 6),
+        size: process.env.TRANSCODER_PREVIEW_SIZE || '320x180',
+        offsetPercent: +(process.env.TRANSCODER_PREVIEW_OFFSET_PERCENT || 0.3),
+        time: +(process.env.TRANSCODER_PREVIEW_TIME || 6),
     },
     thumbnail: {
-        size: process.env.TCR_THUMBNAIL_SIZE || '320x180',
+        size: process.env.TRANSCODER_THUMBNAIL_SIZE || '320x180',
     },
     video: {
-        videoCodec: process.env.TCR_VIDEO_CODEC || 'libx264',
-        audioCodec: process.env.TCR_AUDIO_CODEC || 'aac',
-        extention: process.env.TCR_VIDEO_FORMAT || '.mp4',
+        videoCodec: process.env.TRANSCODER_VIDEO_CODEC || 'libx264',
+        audioCodec: process.env.TRANSCODER_AUDIO_CODEC || 'aac',
+        extention: process.env.TRANSCODER_VIDEO_FORMAT || '.mp4',
     },
-    parallelTranscode: +(process.env.TCR_PARALLEL_TRANSCODE || 1),
+    parallelTranscode: +(process.env.TRANSCODER_PARALLEL_TRANSCODE || 1),
 };
