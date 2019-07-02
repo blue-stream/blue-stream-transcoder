@@ -20,12 +20,12 @@ export const config = {
     },
     s3: {
         enable: true,
-        accessKeyId: process.env.S3_ACCESS_KEY_ID || 'AKIAINJAWB5EF2QRFR7Q',
-        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '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',
+        accessKeyId: process.env.S3_ACCESS_KEY_ID || 'minio',
+        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || 'minio123',
         region: process.env.S3_REGION || 'us-east-1',
         bucket: process.env.S3_BUCKET || 'blue-stream-test',
         isPathStyle: (process.env.S3_IS_PATH_STYLE || '1') === '1' ? true : false,
-        endpoint: process.env.S3_ENDPOINT || '',
+        endpoint: process.env.S3_ENDPOINT || 'http://localhost:9000',
         version: process.env.S3_VERSION || 'v4',
     },
     preview: {
