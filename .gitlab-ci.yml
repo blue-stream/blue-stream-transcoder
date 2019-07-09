@@ -1,4 +1,4 @@
-image: node:latest
+image: node:10.15.3-alpine
 services:
   - docker:dind
 
@@ -6,13 +6,9 @@ stages:
   - build
   - test
   - package
-
-stages:
-  - build
-  - test
-  - package
   
-before_script: 
+before_script:
+    - apk update && apk add ffmpeg imagemagick && rm -rf /var/cache/apk/*
     - npm install --silent --progress=false
 
 cache:
@@ -24,48 +20,38 @@ variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2
     NODE_ENV: 'test'
+    REGION: 'us-east-1'
+    BUCKET: 'blue-stream-test'
+    S3_IS_PATH_STYLE: '1'
+    ACCESS_KEY_ID: 'minio'
+    SECRET_ACCESS_KEY: 'minio123'
+    S3_ENDPOINT: 'http://minio:9000'
+
 
 lint:
   stage: build
   script:
     npm run tslint
 
-variables:
-  NODE_ENV: 'test'
-  DB_SERVER: 'mongo'
-  CONTAINER_IMAGE: registry.gitlab.com/$CI_PROJECT_PATH
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_DRIVER: overlay2
-
-integration_tests:
+test:
+  stage: test
   services:
-  - mongo:latest
-  stage: test
+  - minio:latest
   script:
-  - npm run test:integration
-repository_unit_tests:
-  services:
-  - mongo:latest
-  stage: test
-  script:
-  - npm run test:repository
-validator_unit_tests:
-  stage: test
-  script:
-  - npm run test:validation
+  - npm test
 
 review:
-  stage: build
+  stage: package
   image: docker:latest
   cache: {}
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
   script:
     - docker pull $CONTAINER_IMAGE:latest || true
-    - docker build --cache-from $CONTAINER_IMAGE:latest --tag $CONTAINER_IMAGE:test .
-    - docker push $CONTAINER_IMAGE:test
+    - docker build --cache-from $CONTAINER_IMAGE:latest --tag $CONTAINER_IMAGE:current .
+    - docker push $CONTAINER_IMAGE:current
   only:
-   - template-mongodb
+   - master
 
 release:
   stage: package
@@ -80,3 +66,5 @@ release:
     - docker push $CONTAINER_IMAGE:latest
   only:
    - tags
+  except:
+   - branches
