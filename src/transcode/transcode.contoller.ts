@@ -39,8 +39,7 @@ export class TranscodeController {
             log('info' , 'File transcoded', `file with key ${originKey} was transcoded`, '', 'unknown');
             return productsPaths;
 
-        }
-        catch(error) {
+        } catch (error) {
             log('warn' , 'File transode failure', `file with key ${originKey} failed transcoding with error: ${error}`, '', 'unknown');
             throw error;
         } finally {
@@ -48,7 +47,7 @@ export class TranscodeController {
                 try {
                     await TranscodeManager.deleteTempFiles(wishedOriginPath);
                     log('verbose' , 'Delete temp files', `delete temp files of ${originKey}`, '', 'unknown');
-                } catch(error) {
+                } catch (error) {
                     log('error' , 'Delete temp files failure', `delete temp files of ${originKey} failed with error: ${error}`, '', 'unknown');
                 }
             }

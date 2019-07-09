@@ -20,7 +20,7 @@ export class TranscodeBroker {
                         previewPath: products[1],
                         contentPath: products[2],
                     };
-                    rabbit.publish('application', 'topic', 'transcoder.video.transcode.succeeded', {...newVideo, userId: messageData.userId });
+                    rabbit.publish('application', 'topic', 'transcoder.video.transcode.succeeded', { ...newVideo, userId: messageData.userId });
                 } catch (error) {
                     rabbit.publish('application', 'topic', 'transcoder.video.transcode.failed', messageData);
                     throw error;
