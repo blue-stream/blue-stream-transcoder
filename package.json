@@ -1,6 +1,6 @@
 {
   "name": "blue-stream-transcoder",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Blue Stream micro-service for transcoding",
   "main": "index.js",
   "scripts": {
