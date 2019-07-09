@@ -36,7 +36,7 @@ lint:
 test:
   stage: test
   services:
-  - minio:latest
+  - minio/minio
   script:
   - npm test
 
