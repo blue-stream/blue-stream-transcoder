@@ -20,6 +20,14 @@ export class S3Bucket {
 
         this.bucket = config.s3.bucket;
     }
+    createBucket () {
+        return this.s3.createBucket({ Bucket: this.bucket }).promise()
+        .catch((err: any) => {
+            if (err.name !== 'BucketAlreadyOwnedByYou') {
+                throw err;
+            }
+        });
+    }
 
     async download(destPath: string) {
         const fileStream = fs.createWriteStream(destPath);

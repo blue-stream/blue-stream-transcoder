@@ -24,6 +24,7 @@ const bucket = new S3Bucket();
 describe('Transcode Controller', () => {
     before(async () => {
         await helpers.createDirectory(config.videosDirectory);
+        await bucket.createBucket();
     });
 
     after(async () => {
