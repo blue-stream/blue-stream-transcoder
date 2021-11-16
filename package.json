@@ -33,7 +33,7 @@
     "typescript": "^2.9.2"
   },
   "dependencies": {
-    "aws-sdk": "^2.282.1",
+    "aws-sdk": "^2.814.0",
     "del": "^3.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "llamajs": "^0.2.0",
